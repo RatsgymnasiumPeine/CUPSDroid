@@ -30,7 +30,14 @@ public class PrinterListAdapter extends ArrayAdapter<CupsDroidPrinter> {
         tvName.setText(printer.getName());
         tvHome.setText(printer.getUrl());
         // Return the completed view to render on screen
+
+        convertView.setTag(printer.getId());
         return convertView;
     }
 
+    public void setData(ArrayList<CupsDroidPrinter> values){
+        this.clear();
+        this.addAll(values);
+        this.notifyDataSetChanged();
+    }
 }

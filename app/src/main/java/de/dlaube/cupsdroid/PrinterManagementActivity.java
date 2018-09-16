@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ public class PrinterManagementActivity extends AppCompatActivity {
         for(int i = 0; i < printerNum; i++){
             if(prefs.contains("printer." + i + ".name")) {
                 CupsDroidPrinter printer = new CupsDroidPrinter(
+                        i,
                         prefs.getString("printer." + i + ".name", "Not Found"),
                         prefs.getString("printer." + i + ".url", "Not Found")
                 );
@@ -54,11 +57,31 @@ public class PrinterManagementActivity extends AppCompatActivity {
             }
         });
     }
+    public void refreshList(){
+        final ListView list = findViewById(R.id.printer_list);
+        list.setAdapter(new PrinterListAdapter(this, getPrinters()));
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                int printerNum = (int) view.getTag();
 
+                SharedPreferences prefs =  getSharedPreferences(getString(R.string.printer_prefs_file), MODE_PRIVATE);
+
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.remove("printer." + printerNum + ".name");
+                edit.remove("printer." + printerNum + ".url");
+                edit.apply();
+
+                ((PrinterListAdapter)list.getAdapter()).setData(getPrinters());
+                return true;
+            }
+        });
+    }
     @Override
     public void onResume() {
-        ListView list = findViewById(R.id.printer_list);
-        list.setAdapter(new PrinterListAdapter(this, getPrinters()));
+        final Activity self = this;
+        this.refreshList();
+
 
         super.onResume();
     }
