@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CUPS Droid</string>
+    <string name="title_activity_printer_management">CUPS Droid</string>
+    <string name="title_activity_add_printer">Add printer</string>
+    <string name="printer_name_label">Printer name</string>
+    <string name="printer_url_label">Printer URL</string>
+    <string name="printer_save">Save printer</string>
+
+    <string name="printer_prefs_file">de.dlaube.cupsdroid.printers.prefs</string>
+</resources>
