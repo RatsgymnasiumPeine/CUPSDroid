@@ -7,4 +7,9 @@
     <string name="printer_save">Save printer</string>
 
     <string name="printer_prefs_file">de.dlaube.cupsdroid.printers.prefs</string>
+    <string name="title_printer_information">Printer Information</string>
+    <string name="title_need_auth">Needs authentication</string>
+    <string name="title_credentials">Credentials</string>
+    <string name="input_hint_username">Username</string>
+    <string name="input_hint_password">Password</string>
 </resources>
