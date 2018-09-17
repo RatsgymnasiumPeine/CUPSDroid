@@ -13,6 +13,7 @@ import android.util.Log;
 import android.util.Printer;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,6 @@ public class CupsDroidPrintService extends PrintService {
         @Override
         public void onValidatePrinters(@NonNull List<PrinterId> list) {
             Log.i("cupsdroid", "onValidatePrinters");
-
         }
 
         @Override
@@ -80,6 +80,7 @@ public class CupsDroidPrintService extends PrintService {
 
     @Override
     protected void onPrintJobQueued(PrintJob printJob) {
-
+        org.cups4j.PrintJob printjob = new org.cups4j.PrintJob.Builder(new FileInputStream(printJob.getDocument().getData().getFileDescriptor())).build();
+        org.cups4j.CupsPrinter = new org.cups4j.CupsPrinter(printJob.getInfo().getPrinterId()):
     }
 }
