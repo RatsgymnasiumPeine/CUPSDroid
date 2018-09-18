@@ -31,7 +31,7 @@
                 android:id="@+id/printer_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/printer_name_label" />
+                android:hint="@string/input_hint_printer_name" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -42,7 +42,7 @@
                 android:id="@+id/printer_url_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/printer_url_label"
+                android:hint="@string/input_hint_printer_url"
                 android:inputType="textUri" />
         </android.support.design.widget.TextInputLayout>
 
@@ -77,7 +77,7 @@
                     android:id="@+id/printer_auth_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/input_hint_username" />
+                    android:hint="@string/input_hint_printer_username" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -88,7 +88,7 @@
                     android:id="@+id/printer_auth_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/input_hint_password"
+                    android:hint="@string/input_hint_printer_password"
                     android:inputType="textPassword"
                     android:password="true" />
             </android.support.design.widget.TextInputLayout>
@@ -99,7 +99,7 @@
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/printer_save" />
+            android:text="@string/input_button_save" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

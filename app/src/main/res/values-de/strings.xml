@@ -3,13 +3,15 @@
     <string name="app_name">CUPS Droid</string>
     <string name="title_activity_printer_management">CUPS Droid</string>
     <string name="title_activity_add_printer">Drucker hinzufügen</string>
-    <string name="printer_name_label">Drucker-Name</string>
-    <string name="printer_url_label">Drucker-URL</string>
-    <string name="printer_save">Drucker speichern</string>
+    <string name="input_hint_printer_name">Drucker-Name</string>
+    <string name="input_hint_printer_url">Drucker-URL</string>
+    <string name="input_button_save">Drucker speichern</string>
 
     <string name="title_printer_information">Druckerinformationen</string>
     <string name="title_need_auth">Benötigt Authentifizierung</string>
     <string name="title_credentials">Zugangsdaten</string>
-    <string name="input_hint_username">Benutzername</string>
-    <string name="input_hint_password">Passwort</string>
+    <string name="input_hint_printer_username">Benutzername</string>
+    <string name="input_hint_printer_password">Passwort</string>
+    <string name="message_reading">Lese Druckdatei...</string>
+    <string name="message_uploading">Lade Druckdatei hoch...</string>
 </resources>

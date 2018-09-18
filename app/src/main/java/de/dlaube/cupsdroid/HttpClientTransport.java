@@ -29,6 +29,7 @@ class HttpIppClientTransport implements IppClientTransport {
     private String username;
     private String password;
 
+
     public void setAuthenticationData(String username, String password){
         this.username = username;
         this.password = password;
@@ -40,9 +41,10 @@ class HttpIppClientTransport implements IppClientTransport {
         URL url = new URL(uri.toString().replaceAll("^ipp", "http"));
 
         connection = (HttpURLConnection) url.openConnection();
-        connection.setConnectTimeout(6 * 1000);
+        connection.setConnectTimeout(10 * 1000);
         connection.setRequestMethod("POST");
         connection.addRequestProperty("Content-type", "application/ipp");
+        connection.setChunkedStreamingMode(4*1024);
         connection.setDoOutput(true);
 
         if( !username.isEmpty() && !password.isEmpty() ) {
@@ -74,9 +76,12 @@ class HttpIppClientTransport implements IppClientTransport {
     }
 
     private void copy(InputStream data, OutputStream output) throws IOException {
-        byte[] buffer = new byte[8 * 1024];
+        int bufflength = 4*1024;
+        long written = 0;
+        byte[] buffer = new byte[bufflength];
         int readAmount = data.read(buffer);
         while (readAmount != -1) {
+            written += readAmount;
             output.write(buffer, 0, readAmount);
             readAmount = data.read(buffer);
         }

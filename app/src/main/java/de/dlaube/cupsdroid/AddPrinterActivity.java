@@ -26,7 +26,7 @@ public class AddPrinterActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences prefs =  act.getSharedPreferences(getString(R.string.printer_prefs_file), MODE_PRIVATE);
+                SharedPreferences prefs =  act.getSharedPreferences(getString(R.string._prefs_file), MODE_PRIVATE);
                 int printerNum = prefs.getInt("printerNum", 0);
 
                 String name = ((EditText)findViewById(R.id.printer_name_input)).getText().toString();

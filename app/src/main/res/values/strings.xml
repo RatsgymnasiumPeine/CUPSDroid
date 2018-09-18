@@ -1,15 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CUPS Droid</string>
     <string name="title_activity_printer_management">CUPS Droid</string>
     <string name="title_activity_add_printer">Add printer</string>
-    <string name="printer_name_label">Printer name</string>
-    <string name="printer_url_label">Printer URL</string>
-    <string name="printer_save">Save printer</string>
-
-    <string name="printer_prefs_file">de.dlaube.cupsdroid.printers.prefs</string>
+    <string name="input_hint_printer_name">Printer name</string>
+    <string name="input_hint_printer_url">Printer URL</string>
+    <string name="input_button_save">Save printer</string>
+    <string name="_prefs_file" translatable="false">de.dlaube.cupsdroid.printers.prefs</string>
     <string name="title_printer_information">Printer Information</string>
     <string name="title_need_auth">Needs authentication</string>
     <string name="title_credentials">Credentials</string>
-    <string name="input_hint_username">Username</string>
-    <string name="input_hint_password">Password</string>
+    <string name="input_hint_printer_username">Username</string>
+    <string name="input_hint_printer_password">Password</string>
+    <string name="message_reading">Reading print file...</string>
+    <string name="message_uploading">Uploading print file...</string>
 </resources>

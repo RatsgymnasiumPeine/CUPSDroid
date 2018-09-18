@@ -1,8 +1,8 @@
 package de.dlaube.cupsdroid;
 
-import android.app.Service;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 import android.print.PrintAttributes;
 import android.print.PrinterCapabilitiesInfo;
 import android.print.PrinterId;
@@ -11,14 +11,10 @@ import android.printservice.PrintJob;
 import android.printservice.PrintService;
 import android.printservice.PrinterDiscoverySession;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.util.Printer;
-import android.widget.Toast;
 
 import com.hp.jipp.encoding.IppPacket;
 import com.hp.jipp.model.Operation;
-import com.hp.jipp.trans.IppClientTransport;
 import com.hp.jipp.trans.IppPacketData;
 
 import java.io.FileInputStream;
@@ -39,7 +35,7 @@ public class CupsDroidPrintService extends PrintService {
             Log.i("cupsdroid", "onStartPrinterDiscovery");
             ArrayList<PrinterInfo> printers = new ArrayList<>();
 
-            SharedPreferences prefs = getSharedPreferences(getString(R.string.printer_prefs_file), MODE_PRIVATE);
+            SharedPreferences prefs = getSharedPreferences(getString(R.string._prefs_file), MODE_PRIVATE);
             int printerNum = prefs.getInt("printerNum", 0);
 
             for(int i = 0; i < printerNum; i++){
@@ -95,16 +91,18 @@ public class CupsDroidPrintService extends PrintService {
 
     @Override
     protected void onRequestCancelPrintJob(PrintJob printJob) {
-
+        printJob.cancel();
     }
 
     @Override
     protected void onPrintJobQueued(final PrintJob printJob) {
-        //new FileInputStream(printJob.getDocument().getData().getFileDescriptor());
-
         printJob.start();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            printJob.setStatus(R.string.message_reading);
+            printJob.setProgress(0.2f);
+        }
 
-        SharedPreferences prefs = getSharedPreferences(getString(R.string.printer_prefs_file), MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(getString(R.string._prefs_file), MODE_PRIVATE);
         int printerid = Integer.parseInt(printJob.getInfo().getPrinterId().getLocalId());
 
         String name = prefs.getString("printer." + printerid + ".name", "invalid");
@@ -116,12 +114,9 @@ public class CupsDroidPrintService extends PrintService {
         final HttpIppClientTransport transport = new HttpIppClientTransport();
 
         if(auth) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                printJob.setProgress(0.2f);
-
             transport.setAuthenticationData(username, password);
-
         }
+
 
         final URI uri = URI.create(url);
         final IppPacket printRequest = new IppPacket(Operation.printJob, 123,
@@ -133,14 +128,32 @@ public class CupsDroidPrintService extends PrintService {
                         documentFormat.of("application/octet-stream")));
 
         final FileInputStream file = new FileInputStream(printJob.getDocument().getData().getFileDescriptor());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            printJob.setProgress(0.5f);
+        final long dataLength = printJob.getDocument().getInfo().getDataSize();
 
         new Thread() {
             public void run() {
                 try {
+                    Handler h = new Handler(getMainLooper());
+                    h.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                printJob.setStatus(R.string.message_uploading);
+                                printJob.setProgress(0.5f);
+                            }
+                        }
+                    });
+
                     transport.sendData(uri, new IppPacketData(printRequest, file));
+
+                    h.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                                printJob.setProgress(1f);
+                                printJob.complete();
+                        }
+                    });
                 } catch (IOException e) {
                     Log.e("responseCode", "Code: " + transport.getResponseCode());
                     e.printStackTrace();
@@ -148,9 +161,8 @@ public class CupsDroidPrintService extends PrintService {
             }
         }.start();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            printJob.setProgress(1f);
 
-        printJob.complete();
+
+
     }
 }
