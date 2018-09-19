@@ -127,6 +127,7 @@ public class CupsDroidPrintService extends PrintService {
                         requestingUserName.of("jprint"),
                         documentFormat.of("application/octet-stream")));
 
+        // TODO Garbage collector could remove FileDescriptor because there is no reference when printing it.
         final FileInputStream file = new FileInputStream(printJob.getDocument().getData().getFileDescriptor());
         final long dataLength = printJob.getDocument().getInfo().getDataSize();
 
