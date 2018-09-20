@@ -28,6 +28,10 @@ import static com.hp.jipp.encoding.Tag.*;
 import static com.hp.jipp.model.Types.*;
 
 public class CupsDroidPrintService extends PrintService {
+
+
+    private ArrayList<PrintJob> printJobs;
+
     private class CupsDroidPrinterDiscoverySession extends PrinterDiscoverySession{
 
         @Override
@@ -92,10 +96,12 @@ public class CupsDroidPrintService extends PrintService {
     @Override
     protected void onRequestCancelPrintJob(PrintJob printJob) {
         printJob.cancel();
+        printJobs.remove(printJob);
     }
 
     @Override
     protected void onPrintJobQueued(final PrintJob printJob) {
+        printJobs.add(printJob);
         printJob.start();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             printJob.setStatus(R.string.message_reading);
@@ -152,12 +158,15 @@ public class CupsDroidPrintService extends PrintService {
                         public void run() {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                                 printJob.setProgress(1f);
-                                printJob.complete();
+                            printJob.complete();
+                            printJobs.remove(printJob);
                         }
                     });
                 } catch (IOException e) {
                     Log.e("responseCode", "Code: " + transport.getResponseCode());
                     e.printStackTrace();
+
+                    printJob.fail(e.getLocalizedMessage() + ", code: " + transport.getResponseCode());
                 }
             }
         }.start();
